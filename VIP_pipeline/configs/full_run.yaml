@@ -1,0 +1,34 @@
+input:
+  unique_run_name: "test"
+  image_dir: "/home/mark.do/mast3r/VIP_data/raw"
+
+binary_read:
+  bin_path: "/home/mark.do/mast3r/VIP_data/colmap"
+
+undistortion:
+  enabled: false
+  bypass_path: "/home/mark.do/mast3r/VIP_data/test/undistorted"
+
+keyframe_selection:
+  enabled: true
+  keyframes_path: "/home/mark.do/mast3r/VIP_pipeline/configs/keyframes.csv"
+  bypass_path: "/home/mark.do/mast3r/VIP_data/test/undistorted"
+
+reconstruction:
+  enabled: true
+  parameters:
+    device: "cuda"
+    image_size: 512
+    silent: false
+
+    optim_level: "refine+depth"
+    min_conf_thr: 1.5
+    as_pointcloud: true
+    clean_depth: true
+    cam_size: 0.2,
+    scenegraph_type: 'retrieval'
+    shared_instrinsics: true
+
+  cache_dir: "/pub3/mark.do/mast3r-temp"
+  output_dir: "/home/mark.do/mast3r/output"
+
