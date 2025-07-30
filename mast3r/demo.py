@@ -16,6 +16,7 @@ from scipy.spatial.transform import Rotation
 import tempfile
 import shutil
 import torch
+from pathlib import Path
 
 from mast3r.cloud_opt.sparse_ga import sparse_global_alignment
 from mast3r.cloud_opt.tsdf_optimizer import TSDFPostProcess
@@ -147,6 +148,14 @@ def get_reconstructed_scene(outdir, gradio_delete_cache, model, retrieval_model,
     from a list of images, run mast3r inference, sparse global aligner.
     then run get_3D_model_from_scene
     """
+
+    filelist = []
+    directory = "./important_imgs"
+    for filename in os.listdir(directory):
+        full_path = os.path.join(directory, filename)
+        filelist.append(full_path)
+
+    print(filelist)
     imgs = load_images(filelist, size=image_size, verbose=not silent)
     if len(imgs) == 1:
         imgs = [imgs[0], copy.deepcopy(imgs[0])]
@@ -372,4 +381,4 @@ def main_demo(tmpdirname, model, retrieval_model, device, image_size, server_nam
                                     inputs=[scene, min_conf_thr, as_pointcloud, mask_sky,
                                             clean_depth, transparent_cams, cam_size, TSDF_thresh],
                                     outputs=outmodel)
-    demo.launch(share=share, server_name=server_name, server_port=server_port)
+    demo.launch(share=share, server_name=server_name, server_port=server_port, allowed_paths=["/pub3/mast3r-temp"])

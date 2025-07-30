@@ -598,6 +598,11 @@ def forward_mast3r(pairs, model, cache_path, desc_conf='desc_conf',
             if cache_path is not None:
                 torch.save((matching_score, corres), mkdir_for(path_corres))
 
+            # After saving to cache and updating res_paths
+            del res, X11, X21, X22, X12, C11, C21, C22, C12
+            del descs, qonfs, corres, matching_score
+            torch.cuda.empty_cache()
+
         res_paths[img1['instance'], img2['instance']] = (path1, path2), path_corres
 
     del model
